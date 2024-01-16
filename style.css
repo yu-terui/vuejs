@@ -1,0 +1,21 @@
+table{
+  border-collapse: collapse;
+}
+table th {
+  background: dodgerblue;
+  color: white;
+  font-weight: normal;
+  width: 100px;
+}
+table th:hover{
+  opacity: .7;
+  cursor: pointer;
+}
+table th, table td{
+  border: 1px solid #555;
+  padding: 0 5px;
+}
+table th a{
+  color: white;
+  display: block;
+}
