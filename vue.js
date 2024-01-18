@@ -25,31 +25,6 @@ const app = Vue.createApp({
       this.search_key = key;
     },
     searchBtn() {
-        console.log(this.newUsers);
-        return this.newUsers;
-    },
-  },
-  computed: {
-    sort_users() {
-      //v-forでもこの値を使用
-      if (this.sort_key != "") {
-        //sort_keyが空じゃない場合
-        let set = 1; //setという変数を使って戻り値の値を変更
-        this.sort_asc ? (set = 1) : (set = -1);
-        let collator = new Intl.Collator("ja");
-        this.users.sort(collator.compare);
-        this.users.sort((a, b) => {
-          if (a[this.sort_key] < b[this.sort_key]) return -1 * set;
-          if (a[this.sort_key] > b[this.sort_key]) return 1 * set;
-          return 0;
-        });
-        return this.users;
-      } else {
-        return this.users;
-      }
-    },
-    search_users() {
-      this.newUsers = Array.from(this.users);
       //１．セレクトボックスの値が選択されているか
       if (this.search_key != "") {
         let usersList = []; //検索にヒットしたデータを格納する配列を用意
@@ -88,19 +63,40 @@ const app = Vue.createApp({
             usersList.push(user);
           }
         }
+        //クリックしたときに空っぽにする
         this.newUsers.splice(0, this.newUsers.length);
+        //代入
         this.newUsers.push(usersList);
-        // usersListをreturnではなく代入して結果を返す
-    }
-      else {//デフォルト表示
         return this.newUsers;
+        // usersListをreturnではなく代入して結果を返す
+      }
+    },
+  },
+  computed: {
+    sort_users() {
+      //v-forでもこの値を使用
+      if (this.sort_key != "") {
+        //sort_keyが空じゃない場合
+        let set = 1; //setという変数を使って戻り値の値を変更
+        this.sort_asc ? (set = 1) : (set = -1);
+        let collator = new Intl.Collator("ja");
+        this.users.sort(collator.compare);
+        this.users.sort((a, b) => {
+          if (a[this.sort_key] < b[this.sort_key]) return -1 * set;
+          if (a[this.sort_key] > b[this.sort_key]) return 1 * set;
+          return 0;
+        });
+        return this.users;
+      } else {
+        return this.users;
       }
     },
   },
   mounted() {
     axios
       .get("./cards.json")
-      .then((response) => (this.users = response.data))
+      // .then((response) => (this.users = response.data))
+      .then((response) => (this.newUsers = response.data))
       .catch((error) => console.log(error));
   },
 });
