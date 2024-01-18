@@ -1,8 +1,10 @@
-const app = Vue.createApp({ //Composition API
+const app = Vue.createApp({
+  //Composition API
   data() {
     //この中で定義した変数をhtmlでも使える
     return {
       users: [],
+      newUsers: [],
       sort_key: "",
       sort_asc: true,
       search_key: "",
@@ -11,17 +13,21 @@ const app = Vue.createApp({ //Composition API
     };
   },
   methods: {
-    sortBy(key) {//クリックされたときに昇順降順の切り替え
+    sortBy(key) {
+      //クリックされたときに昇順降順の切り替え
       this.sort_key === key
         ? (this.sort_asc = !this.sort_asc)
         : (this.sort_asc = true);
       this.sort_key = key;
     },
-    filterBy(key) {//selectValueの判定
+    filterBy(key) {
+      //selectValueの判定
       this.search_key = key;
     },
-    search() {
-    }
+    searchBtn() {
+        console.log(this.newUsers);
+        return this.newUsers;
+    },
   },
   computed: {
     sort_users() {
@@ -43,30 +49,51 @@ const app = Vue.createApp({ //Composition API
       }
     },
     search_users() {
-      if(this.search_key !=""){
-      let usersList = []; //検索にヒットしたデータを格納する配列を用意
-      for(let i in this.users) {  //this.usersListはdataで定義しているデータをforで順番に回していきます
-        let user = this.users[i];  //回されてきたデータを変数userに格納
-        //indexOfでuserデータとinputValue(ユーザーが入力した文字)が一致するか判断
-        if(this.search_key == 'id' && user.id == this.inputValue) {
-          usersList.push(user);
+      this.newUsers = Array.from(this.users);
+      //１．セレクトボックスの値が選択されているか
+      if (this.search_key != "") {
+        let usersList = []; //検索にヒットしたデータを格納する配列を用意
+        for (let i in this.newUsers) {
+          //this.newUsersListはdataで定義しているデータをforで順番に回していきます
+          let user = this.newUsers[i]; //回されてきたデータを変数userに格納
+          //２．セレクトボックスの値に応じて、検索欄の値と一致するデータがあるかを判定
+          if (
+            this.search_key == "id" &&
+            user.id == this.inputValue
+          ) {
+            usersList.push(user);
+          }
+          if (
+            this.search_key == "name" &&
+            user.name.indexOf(this.inputValue) !== -1
+          ) {
+            usersList.push(user);
+          }
+          if (
+            this.search_key == "company" &&
+            user.company.indexOf(this.inputValue) !== -1
+          ) {
+            usersList.push(user);
+          }
+          if (
+            this.search_key == "division" &&
+            user.division.indexOf(this.inputValue) !== -1
+          ) {
+            usersList.push(user);
+          }
+          if (
+            this.search_key == "title" &&
+            user.title.indexOf(this.inputValue) !== -1
+          ) {
+            usersList.push(user);
+          }
         }
-          if(this.search_key == 'name' && user.name.indexOf(this.inputValue) !== -1){
-          usersList.push(user);
-        }
-          if(this.search_key == 'company' && user.company.indexOf(this.inputValue) !== -1){
-          usersList.push(user);
-        }
-          if(this.search_key == 'division' && user.division.indexOf(this.inputValue) !== -1){
-          usersList.push(user);
-        }
-          if(this.search_key == 'title' && user.title.indexOf(this.inputValue) !== -1){
-          usersList.push(user);
-        }
-      }
-      return usersList;  //usersListを返します
-      } else{
-        return this.users;
+        this.newUsers.splice(0, this.newUsers.length);
+        this.newUsers.push(usersList);
+        // usersListをreturnではなく代入して結果を返す
+    }
+      else {//デフォルト表示
+        return this.newUsers;
       }
     },
   },
