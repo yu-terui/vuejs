@@ -2,7 +2,15 @@
     <link rel="stylesheet" href="./style.css">
     <body>
         <div id="app">
-            <h1>{{sort_key}}</h1>
+            <select v-model="selectValue" @change="filterBy(selectValue)">
+                <option value="id">ID</option>
+                <option value="name">名前</option>
+                <option value="company">会社名</option>
+                <option value="division">部署名</option>
+                <option value="title">役職</option>
+            </select>
+            <input type="text" v-model="inputValue" placeholder="検索ワード">
+            <button @click="searchBtn()">検索</button>
             <table>
                 <tr>
                     <th @click="sortBy('id')">ID</th>
@@ -11,7 +19,14 @@
                     <th @click="sortBy('division')">部署</th>
                     <th @click="sortBy('title')">役職</th>
                 </tr>
-                <tr v-for="user in sort_users" :key="user.list">
+                <!-- <tr v-for="user in sort_users" :key="user.id">
+                    <td>{{user.id}}</td>
+                    <td>{{user.name}}</td>
+                    <td>{{user.company}}</td>
+                    <td>{{user.division}}</td>
+                    <td>{{user.title}}</td>
+                </tr> -->
+                <tr v-for="user in newUsers" :key="user.list">
                     <td>{{user.id}}</td>
                     <td>{{user.name}}</td>
                     <td>{{user.company}}</td>
