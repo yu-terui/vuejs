@@ -87,6 +87,13 @@ const app = Vue.createApp({
         (this.titleValue == "")
       ) {
         alert("すべて必須項目です");
+      } else if (
+        (isInvalidName = true) |
+        (isInvalidCompany = true) |
+        (isInvalidDivision = true) |
+        (isInvalidTitle = true)
+      ) {
+        return false;
       } else {
         let lastItem = this.newUsers.slice(-1)[0];
         this.newUsers.push(
