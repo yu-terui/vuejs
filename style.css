@@ -1,4 +1,4 @@
-table{
+table {
   border-collapse: collapse;
 }
 table th {
@@ -8,19 +8,24 @@ table th {
   width: 100px;
 }
 table th:hover,
-button:hover{
-  opacity: .7;
+button:hover {
+  opacity: 0.7;
   cursor: pointer;
 }
-table th, table td{
+table th,
+table td {
   border: 1px solid #555;
   padding: 0 5px;
 }
-table th a{
+table th a {
   color: white;
   display: block;
 }
-select, input{
+select,
+input {
   margin: 5px 5px 5px 0;
   padding: 5px;
+}
+.error {
+  color: red;
 }
