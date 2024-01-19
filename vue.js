@@ -25,8 +25,11 @@ const app = Vue.createApp({
       this.search_key = key;
     },
     searchBtn() {
+      //クリックする度にnewUsersをリセット
+      this.newUsers = this.users;
       //１．セレクトボックスの値が選択されているか
       if (this.search_key != "") {
+        // this.newUsers.splice(0, this.newUsers.length);
         let usersList = []; //検索にヒットしたデータを格納する配列を用意
         for (let i in this.newUsers) {
           //this.newUsersListはdataで定義しているデータをforで順番に回していきます
@@ -63,13 +66,9 @@ const app = Vue.createApp({
             usersList.push(user);
           }
         }
-        //クリックしたときに空っぽにする
-        this.newUsers.splice(0, this.newUsers.length);
         //代入
-        this.newUsers.push(usersList);
-        return this.newUsers;
-        // usersListをreturnではなく代入して結果を返す
-      }
+        this.newUsers = usersList;
+      }//2回目以降の検索が、絞り込まれたリストの中からの検索になっている＝newUsersの中身がそれだけだから
     },
   },
   computed: {
@@ -95,8 +94,11 @@ const app = Vue.createApp({
   mounted() {
     axios
       .get("./cards.json")
-      // .then((response) => (this.users = response.data))
-      .then((response) => (this.newUsers = response.data))
+      .then((response) => (this.users = response.data))
+      .catch((error) => console.log(error));
+    axios
+      .get("./cards.json")
+      .then((res) => (this.newUsers = res.data))
       .catch((error) => console.log(error));
   },
 });
