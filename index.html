@@ -11,6 +11,26 @@
             </select>
             <input type="text" v-model="inputValue" placeholder="検索ワード">
             <button @click="searchBtn()">検索</button>
+            <dl>
+                <p>新規情報追加</p>
+                <dt><label for="name">名前</label></dt>
+                <dd><input type="text" id="name" v-model="nameValue">
+                    <p v-if="isInvalidName" class="error">{{message}}</p>
+                </dd>
+                <dt><label for="company">会社名</label></dt>
+                <dd><input type="text" id="company" v-model="companyValue">
+                    <p v-if="isInvalidCompany" class="error">{{message}}</p>
+                </dd>
+                <dt><label for="division">部署</label></dt>
+                <dd><input type="text" id="division" v-model="divisionValue">
+                    <p v-if="isInvalidDivision" class="error">{{message}}</p>
+                </dd>
+                <dt><label for="title">役職</label></dt>
+                <dd><input type="text" id="title" v-model="titleValue">
+                    <p v-if="isInvalidTitle" class="error">{{message}}</p>
+                </dd>
+                <button @click="createBtn()">作成</button>
+            </dl>
             <table>
                 <tr>
                     <th @click="sortBy('id')">ID</th>

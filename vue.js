@@ -5,14 +5,23 @@ const app = Vue.createApp({
     return {
       users: [],
       newUsers: [],
+      //ソート
       sort_key: "",
       sort_asc: true,
+      //検索
       search_key: "",
       inputValue: "",
       selectValue: "",
+      //新規追加
+      nameValue: "",
+      companyValue: "",
+      divisionValue: "",
+      titleValue: "",
+      message: "英数字記号を含めないでください",
     };
   },
   methods: {
+    //ソート機能 項目クリック
     sortBy(key) {
       //クリックされたときに昇順降順の切り替え
       this.sort_key === key
@@ -20,10 +29,12 @@ const app = Vue.createApp({
         : (this.sort_asc = true);
       this.sort_key = key;
     },
+    //絞り込み機能 セレクトボックスの項目選択
     filterBy(key) {
       //selectValueの判定
       this.search_key = key;
     },
+    //絞り込み機能 検索ボタン
     searchBtn() {
       //クリックする度にnewUsersをリセット
       this.newUsers = this.users;
@@ -35,10 +46,7 @@ const app = Vue.createApp({
           //this.newUsersListはdataで定義しているデータをforで順番に回していきます
           let user = this.newUsers[i]; //回されてきたデータを変数userに格納
           //２．セレクトボックスの値に応じて、検索欄の値と一致するデータがあるかを判定
-          if (
-            this.search_key == "id" &&
-            user.id == this.inputValue
-          ) {
+          if (this.search_key == "id" && user.id == this.inputValue) {
             usersList.push(user);
           }
           if (
@@ -68,10 +76,32 @@ const app = Vue.createApp({
         }
         //代入
         this.newUsers = usersList;
-      }//2回目以降の検索が、絞り込まれたリストの中からの検索になっている＝newUsersの中身がそれだけだから
+      } //2回目以降の検索が、絞り込まれたリストの中からの検索になっている＝newUsersの中身がそれだけだから
+    },
+    //新規追加機能
+    createBtn() {
+      if (
+        (this.nameValue == "") |
+        (this.companyValue == "") |
+        (this.divisionValue == "") |
+        (this.titleValue == "")
+      ) {
+        alert("すべて必須項目です");
+      } else {
+        let lastItem = this.newUsers.slice(-1)[0];
+        this.newUsers.push(
+          ...[{
+            id: lastItem.id + 1,
+            name: this.nameValue,
+            company: this.companyValue,
+            division: this.divisionValue,
+            title: this.titleValue,
+          }]);
+      }
     },
   },
   computed: {
+    //ソート機能 判定
     sort_users() {
       //v-forでもこの値を使用
       if (this.sort_key != "") {
@@ -89,6 +119,19 @@ const app = Vue.createApp({
       } else {
         return this.users;
       }
+    },
+    //新規追加機能 バリデーション
+    isInvalidName() {
+      return this.nameValue.match(/[a-zA-Z0-9!-/:-@¥[-`{-~]/);
+    },
+    isInvalidCompany() {
+      return this.companyValue.match(/[a-zA-Z0-9!-/:-@¥[-`{-~]/);
+    },
+    isInvalidDivision() {
+      return this.divisionValue.match(/[a-zA-Z0-9!-/:-@¥[-`{-~]/);
+    },
+    isInvalidTitle() {
+      return this.titleValue.match(/[a-zA-Z0-9!-/:-@¥[-`{-~]/);
     },
   },
   mounted() {
